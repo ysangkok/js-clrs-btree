@@ -121,6 +121,7 @@ BN.prototype.remove = function(K) {
 			} else {
 				//console.log("case 2c");
 				this.children[pos].keys = this.children[pos].keys.concat(this.keys[pos]).concat(this.children[pos+1].keys);
+                this.children[pos].children = this.children[pos].children.concat(this.children[pos+1].children);
 				for (i=pos; i<this.numberKeys(); i++) {
 					this.keys[i] = this.keys[i+1];
 					this.children[i+1] = this.children[i+2];

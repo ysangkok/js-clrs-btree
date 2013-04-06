@@ -40,13 +40,13 @@ inserted = null;
 deleted = [];
 while (true) {
     if (inserting) {
-        if (added.length === 9) {
+        if (added.length === (nodejs ? 500 : 200)) {
             inserted = added.slice();
             inserting = !inserting;
             continue;
         }
         do {
-            v = Math.floor((Math.random())*Math.pow(2,4));
+            v = Math.floor((Math.random())*Math.pow(2,31));
         } while (added.indexOf(v) !== -1);
         added.push(v);
         if (!nodejs) ttft.Insert(v);
@@ -78,7 +78,7 @@ while (true) {
     previous = jssrc;
 }
 }());
-//print("Iteration");
+print("Iteration");
 }
 
 } catch (e) {
