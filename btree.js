@@ -151,7 +151,7 @@ BN.prototype.remove = function(K) {
 		if (destnode.isEmpty()) {
 			if (nachbarn.every(function(nachbar){ return nachbar.isEmpty(); })) {
 				//console.log("case 3b");
-                var l = Math.min(this.numberKeys()-1,j);
+                var l = Math.min(this.children.indexOf(ersteNachbar), j);
                 if (this.children.indexOf(ersteNachbar) < this.children.indexOf(destnode)) {
     				destnode.keys = ersteNachbar.keys.concat(this.keys.splice(l,1)).concat(destnode.keys);
 				    destnode.children = ersteNachbar.children.concat(destnode.children);

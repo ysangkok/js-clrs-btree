@@ -1,4 +1,5 @@
 Array.prototype.compare = function(array) { //prototype defines the .compare as method of any object
+    //return this.toString() === array.toString();
     if (this.length !== array.length) //first compare length - saves us a lot of time
       return false;
     for (var i=0; i<this.length; i++) {
@@ -12,7 +13,14 @@ Array.prototype.compare = function(array) { //prototype defines the .compare as 
     return true;
 };
 
-load(["btree.js"]);
+var nodejs = typeof(process) !== "undefined";
+if (!nodejs) {
+    load(["btree.js"]);
+} else {
+    var btree = require("./btree");
+    var print = console.log;
+    var quit = process.exit;
+}
 
 var previous, inserting, inserted, v, deleted;
 
@@ -22,81 +30,69 @@ while (true) {
 var bt = new btree.BT(2, function(a, b) { return a < b ? -1 : a === b ? 0 : 1; });
 bt.root = new btree.BN(bt, [], []);
 
-var ttft = new Packages.PublicTTFT();
-ttft.SplitOnTheWayDown(true);
+if (!nodejs) {
+    var ttft = new Packages.PublicTTFT();
+    ttft.SplitOnTheWayDown(true);
+}
 var added = [];
 inserting = true;
 inserted = null;
 deleted = [];
 while (true) {
     if (inserting) {
-        if (added.length === 20) {
+        if (added.length === 9) {
             inserted = added.slice();
             inserting = !inserting;
-            print("Deleting");
             continue;
         }
         do {
-            v = Math.floor((Math.random())*Math.pow(2,6));
+            v = Math.floor((Math.random())*Math.pow(2,4));
         } while (added.indexOf(v) !== -1);
         added.push(v);
-        ttft.Insert(v);
+        if (!nodejs) ttft.Insert(v);
         bt.root.insert(v);
     } else {
         if (added.length === 0) break;
         v = added.splice(Math.floor(Math.random() * added.length), 1)[0];
         if (typeof(v) !== "number") throw new Error("not a number from added: " + v + ", type: " + typeof v + ", instance: " + v.prototype);
-        ttft.Delete(v);
+        if (!nodejs) ttft.Delete(v);
         bt.root.remove(v);
         deleted.push(v);
     }
-    var javasrc = String(Packages.Tester.dumpJSON(ttft.getRoot()));
+    if (!nodejs) var javasrc = String(Packages.Tester.dumpJSON(ttft.getRoot()));
     var jssrc = String(bt.root.toJSON());
-    if (javasrc.length !== jssrc.length) {
-        print("Unequal!" + javasrc.length + jssrc.length);
-        print("Java:");
-        print(javasrc);
-        print("JavaScript:");
-        print(jssrc);
-        throw new Error();
+    if (!nodejs && javasrc.length !== jssrc.length) {
+        throw new Error("Unequal! Java: " + javasrc.length + " JS: " + jssrc.length + "\n" +
+        "Java:\n" +
+        javasrc + "\n" +
+        "JavaScript:\n" +
+        jssrc);
     }
 
     var list = bt.root.traverse();
-    var sorted = list.slice().sort(function(a,b){return b>a;});
+    var sorted = list.slice();
+    sorted.sort(function(a,b){return Number(a)>Number(b) ? 1 : Number(a)<Number(b) ? -1 : 0;});
     if (!list.compare(sorted)) {
-        print("b-tree not sorted!");
-        print(list);
-        print(sorted);
-        print(jssrc);
-        throw new Error();
+        throw new Error("b-tree not sorted!\nOrg List:" + list + "\nSorted  :" + sorted + "\n" + jssrc);
     }
-    previous = javasrc;
+    previous = jssrc;
 }
-//ttft.Dump();
-/*
-print("Java:");
-print(Packages.Tester.dumpJSON(ttft.root));
-
-print("JavaScript:");
-print(bt.root.toJSON());
-*/
-print("Success!");
 }());
+//print("Iteration");
 }
 
 } catch (e) {
-    print("Catch");
+    print("Catch: " + e);
     if (e.rhinoException != null)
         e.rhinoException.printStackTrace();
     else if (e.javaException != null)
         e.javaException.printStackTrace();
     print("previous: " + previous);
-    print("tried " + (inserting ? "inserting" : "deleting") + " " + v);
-    print("inserted");
+    print("tried " + (inserting ? "inserting" : "deleting") + ": " + v);
+    print("inserted:");
     print(inserted);
-    print("deleted");
+    print("deleted:");
     print(deleted);
-    print("working on");
+    print("working on:");
     print(v);
-    quit();
 }
