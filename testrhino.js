@@ -13,6 +13,16 @@ Array.prototype.compare = function(array) { //prototype defines the .compare as 
     return true;
 };
 
+function traversejson(obj) {
+    var acc = [];
+    for (var i=0; i<obj.keys.length; i++) {
+        if (obj["children"] && obj.children[i]) acc = acc.concat(traversejson(obj.children[i]));
+        acc.push(obj.keys[i]);
+    }
+    if (obj["children"] && obj.children[i]) acc = acc.concat(traversejson(obj.children[i]));
+    return acc;
+}
+
 var nodejs = typeof(process) !== "undefined";
 if (!nodejs) {
     load(["btree.js"]);
@@ -61,7 +71,7 @@ while (true) {
     }
     if (!nodejs) var javasrc = String(Packages.Tester.dumpJSON(ttft.getRoot()));
     var jssrc = String(bt.root.toJSON());
-    if (!nodejs && javasrc.length !== jssrc.length) {
+    if (!nodejs && (javasrc.length !== jssrc.length || !traversejson(JSON.parse(javasrc)).compare(traversejson(JSON.parse(jssrc))))) {
         throw new Error("Unequal! Java: " + javasrc.length + " JS: " + jssrc.length + "\n" +
         "Java:\n" +
         javasrc + "\n" +
