@@ -24,20 +24,17 @@ BN.prototype.fromJSON = function(bt, json) {
 };
 
 BN.prototype.toJSON = function() {
-    var keysb, cldsb;
-    keysb = cldsb = "[";
+    var cldsb;
+    cldsb = "[";
     for (var i=0; i<this.numberKeys(); i++) {
-        keysb += String(this.keys[i]) + ",";
         if (!this.isLeaf())
             cldsb += this.children[i].toJSON() + ",";
     }
-    if (keysb.length > 1) keysb = keysb.slice(0, keysb.length-1);
     if (!this.isLeaf())
         cldsb += this.children[i].toJSON();
 
-    keysb += "]";
     cldsb += "]";
-    return ("{\"keys\":" + keysb.toString() + ",\"children\":" + cldsb.toString() + "}").replace(",\"children\":[]","");
+    return ("{\"keys\":" + JSON.stringify(this.keys) + ",\"children\":" + cldsb.toString() + "}").replace(",\"children\":[]","");
 };
 
 BN.prototype.traverse = function() {

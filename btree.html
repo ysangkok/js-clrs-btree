@@ -17,25 +17,25 @@ font-family: 'Terminus', monospace;
 <script src="btree.js"></script>
 <script>
 function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
+    return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 function readInput() {
-	return (isNumber(document.getElementById('treekeyvalue').value)
-		? [parseFloat(document.getElementById('treekeyvalue').value)]
-		: document.getElementById('treekeyvalue').value.split(",").map(function(v){ return isNumber(v) ? parseFloat(v) : v; }));
+    return (isNumber(document.getElementById('treekeyvalue').value)
+        ? [parseFloat(document.getElementById('treekeyvalue').value)]
+        : document.getElementById('treekeyvalue').value.split(",").map(function(v){ return isNumber(v) ? parseFloat(v) : v; }));
 }
 
 function init(id, mid) {
-	var insrc = document.getElementById(id).value;
-	var bt = window.bt = new btree.BT(parseInt(document.getElementById(mid).value, 10), function(a, b) { return a < b ? -1 : a === b ? 0 : 1; });
-	bt.root = btree.BN.prototype.fromJSON(bt, JSON.parse(insrc));
-	draw();
+    var insrc = document.getElementById(id).value;
+    var bt = window.bt = new btree.BT(parseInt(document.getElementById(mid).value, 10), function(a, b) { return a < b ? -1 : a === b ? 0 : 1; });
+    bt.root = btree.BN.prototype.fromJSON(bt, JSON.parse(insrc));
+    draw();
 }
 
 function draw() {
-	var dot = document.getElementById("out").value = window.bt.root.toGraphViz();
-	document.getElementById("svgelem").innerHTML = Viz(dot, "svg");
+    var dot = document.getElementById("out").value = window.bt.root.toGraphViz();
+    document.getElementById("svgelem").innerHTML = Viz(dot, "svg");
 }
 
 function tojson() {
@@ -47,21 +47,53 @@ function traverse() {
 }
 
 function del(keys) {
-	keys.forEach(function(key) {window.bt.root.remove(key);});
-	draw();
+    checkTreeIsInited();
+    keys.forEach(function(key) {window.bt.root.remove(key);});
+    draw();
+    setEnterAction("del");
+}
+
+function checkTreeIsInited() {
+    if (typeof(window.bt) === "undefined") {
+        alert("Tree uninitalized!");
+        throw new Error("Tree uninitalized!");
+    }
 }
 
 function ins(keys) {
-	keys.forEach(function(key) {window.bt.root.insert(key);});
-	draw();
+    checkTreeIsInited();
+    keys.forEach(function(key) {window.bt.root.insert(key);});
+    draw();
+    setEnterAction("ins");
+}
+
+function swap(ent) {
+    ent.fontWeight = (ent.fontWeight === "bold") ? "" : "bold";
+}
+
+function setEnterAction(act) {
+    if (window.action !== window[act]) {
+        swap(document.getElementById(act + "_button").style);
+        swap(document.getElementById((act == "ins" ? "del" : "ins") + "_button").style);
+    }
+    window.action = window[act];
+}
+
+function deleteOrInsert(e) {
+    if (e.keyCode === 13) {
+        if (typeof(window.action) === "undefined") {
+            setEnterAction("ins");
+        }
+        window.action(readInput());
+    }
 }
 </script>
 <h1>B-Tree</h1>
 <button onclick="tojson()">To JSON</button>
 <button onclick="traverse()">Traverse</button>
-<label>Key for insertion/deletion: <input id="treekeyvalue" value="11"></label>
-<button onclick="ins(readInput())">Insert</button>
-<button onclick="del(readInput())">Delete</button>
+<label>Key for insertion/deletion: <input id="treekeyvalue" value="11" onkeyup="deleteOrInsert(event)"></label>
+<button id="ins_button" onclick="ins(readInput())">Insert</button>
+<button id="del_button" onclick="del(readInput())">Delete</button>
 Delete:
 <button onclick="del(['F'])">F</button>
 <button onclick="del(['M'])">M</button>
@@ -84,19 +116,19 @@ Delete:
 {
 "keys":["P"],
 "children":[
-	{"keys":["C","G","M"],
-	 "children": [
-		{"keys": ["A","B"]},
-		{"keys": ["D","E","F"]},
-		{"keys": ["J","K","L"]},
-		{"keys": ["N","O"]}
-	]},
-	{"keys":["T","X"],
-	 "children": [
-		{"keys": ["Q","R","S"]},
-		{"keys": ["U","V"]},
-		{"keys": ["Y","Z"]}
-	]}
+    {"keys":["C","G","M"],
+     "children": [
+        {"keys": ["A","B"]},
+        {"keys": ["D","E","F"]},
+        {"keys": ["J","K","L"]},
+        {"keys": ["N","O"]}
+    ]},
+    {"keys":["T","X"],
+     "children": [
+        {"keys": ["Q","R","S"]},
+        {"keys": ["U","V"]},
+        {"keys": ["Y","Z"]}
+    ]}
 ]
 }
 </textarea>
@@ -105,14 +137,18 @@ Delete:
 {
 "keys":["G","M","P","X"],
 "children":[
-	{"keys":["A","C","D","E"]},
-	{"keys":["J","K"]},
-	{"keys":["N","O"]},
-	{"keys":["R","S","T","U","V"]},
-	{"keys":["Y","Z"]}
+    {"keys":["A","C","D","E"]},
+    {"keys":["J","K"]},
+    {"keys":["N","O"]},
+    {"keys":["R","S","T","U","V"]},
+    {"keys":["Y","Z"]}
 ]
 }
 </textarea>
 </div>
 <p><div id="svgelem"></div>
 <p><textarea readonly id="out" cols="60" rows="10"></textarea>
+<script>
+document.getElementById("del_button").style.fontWeight = "bold";
+setEnterAction("ins");
+</script>
