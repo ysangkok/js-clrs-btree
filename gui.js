@@ -75,7 +75,7 @@ function deleteOrInsert(e) {
 }
 
 function scheduleNext(idx) {
-    var h = window.location.hash.substring(1);
+    var h = decodeURIComponent(window.location.hash.substring(1));
     if (!h) return;
     h = JSON.parse(h);
     var v = h["actions"][idx % h["actions"].length];
