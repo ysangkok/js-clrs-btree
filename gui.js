@@ -84,6 +84,8 @@ function scheduleNext(idx) {
         var fun;
         if (v[0] === "initTree")
             fun = window["initTree"];
+        else if (v[0] === "stop")
+            return;
         else
             fun = window.bt.root[v[0]];
         Function.prototype.apply.call(fun, window.bt ? window.bt.root : null, v.slice(1));
