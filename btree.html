@@ -10,16 +10,22 @@ textarea {
 font-size: 14px;
 font-family: 'Terminus', monospace;
 }
+abbr:hover {
+cursor: help;
+}
+abbr {
+text-decoration: underline;
+}
 </style>
 </head>
-<body>
+<body onload="onLoad()">
 <script src="viz.js"></script>
 <script src="btree.js"></script>
 <script src="gui.js"></script>
 <h1>B-Tree</h1>
 <button onclick="tojson()">To JSON</button>
 <button onclick="traverse()">Traverse</button>
-<label>Key for insertion/deletion: <input id="treekeyvalue" value="11" onkeyup="deleteOrInsert(event)"></label>
+<label>Key<abbr onclick="generateInput()" title="Comma-seperated, click to generate">s</abbr> for insertion/deletion: <input id="treekeyvalue" value="11" onkeyup="deleteOrInsert(event)"></label>
 <button id="ins_button" onclick="ins(readInput())">Insert</button>
 <button id="del_button" onclick="del(readInput())">Delete</button>
 Delete:
@@ -29,11 +35,14 @@ Delete:
 <button onclick="del(['D'])">D</button>
 <button onclick="del(['B'])">B</button>
 <button onclick="del(['N'])">N</button>
+Show intermediate states of the tree: <input type="checkbox" id="drawCheckBox" checked></input>
+<button onclick="setDelay()">Set delay</button>
 <!--
 <button onclick="draw()">Draw</button>
 -->
 <div style="float:right">
-<p><button onclick="init('simple','simplem')">Init simple</button><br><label>M: <input id="simplem" value="2"></label><br>
+<p><button onclick="init('simple','simplem')">Init simple</button><button onclick="init('empty','simplem')">Init empty with this M</button><input type="hidden" id="empty" value='{"keys":[]}'></input>
+<br><label>M: <input id="simplem" value="2"></label><br>
 <textarea id="simple" cols="60" rows="5">
 {"keys": [10,20,30],
  "children": [{"keys": [1,2]}, {"keys": [11,12]}, {"keys": [21,22]}, {"keys": [31,32]}]
@@ -79,6 +88,4 @@ Delete:
 <script>
 document.getElementById("del_button").style.fontWeight = "bold";
 setEnterAction("ins");
-
-scheduleNext(0);
 </script>

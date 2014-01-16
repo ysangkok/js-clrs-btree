@@ -48,7 +48,7 @@ function checkTreeIsInited() {
 
 function ins(keys) {
     checkTreeIsInited();
-    keys.forEach(function(key) {window.bt.root.insert(key);});
+    keys.forEach(function(key) {window.bt.root.insert(key); });
     draw();
     setEnterAction("ins");
 }
@@ -74,22 +74,52 @@ function deleteOrInsert(e) {
     }
 }
 
-function scheduleNext(idx) {
-    var h = decodeURIComponent(window.location.hash.substring(1));
+var h;
+
+function onLoad() {
+    h = decodeURIComponent(window.location.hash.substring(1));
     if (!h) return;
     h = JSON.parse(h);
-    var v = h["actions"][idx % h["actions"].length];
+    if (!h["delay"]) h["delay"] = 1000;
+    scheduleNext(0);
+}
+
+function setDelay() {
+    var delay = prompt("Delay in ms");
+    if (delay === null) return;
+    h["delay"] = parseInt(delay);
+}
+
+function scheduleNext(idx) {
+    if (!h) return;
+    var thisIdx = idx % h["actions"].length;
+    var v = h["actions"][thisIdx];
     window.setTimeout(function() {
         console.log(v);
         var fun;
         if (v[0] === "initTree")
             fun = window["initTree"];
-        else if (v[0] === "stop")
+        else if (v[0] === "stop") {
+            draw();
             return;
-        else
+        } else
             fun = window.bt.root[v[0]];
         Function.prototype.apply.call(fun, window.bt ? window.bt.root : null, v.slice(1));
-        draw();
+        if (drawIntermediate() || thisIdx == h["actions"].length - 1 || thisIdx == 0 /* if it's the last or first action, always draw */) draw();
         scheduleNext(idx+1);
-    }, h["delay"] ? h["delay"] : 1000);
+    }, h["delay"]);
+}
+
+function drawIntermediate() {
+    return document.getElementById("drawCheckBox").checked;
+}
+
+function generateInput() {
+    var start = prompt("Start index");
+    if (start === null) return;
+    var stop = prompt("Stop index");
+    if (stop === null) return;
+    var a = [];
+    for (var i=start; i<=stop; i++) a.push(i);
+    document.getElementById("treekeyvalue").value = a.join(",");
 }
