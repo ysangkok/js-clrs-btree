@@ -23,19 +23,24 @@ function traversejson(obj) {
     return acc;
 }
 
+var rhino = typeof(importPackage) !== "undefined";
 var nodejs = typeof(process) !== "undefined";
-if (!nodejs) {
+
+if (rhino) {
     load(["btree.js"]);
-} else {
+} else if (nodejs) {
     var btree = require("./btree");
     var print = console.log;
     var quit = process.exit;
+} else {
+    load("btree.js");
 }
 
 var previous, inserting, inserted, v, deleted;
 
 try {
 while (true) {
+var start = new Date();
 (function() {
 var bt = new btree.BT(2, function(a, b) { return a < b ? -1 : a === b ? 0 : 1; });
 bt.root = new btree.BN(bt, [], []);
@@ -88,7 +93,8 @@ while (true) {
     previous = jssrc;
 }
 }());
-print("Iteration");
+var end = new Date();
+print("Iteration" + (String)(end-start));
 }
 
 } catch (e) {
