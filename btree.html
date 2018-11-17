@@ -1,5 +1,6 @@
-<?xml version="1.0" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN""XHTML1-s.dtd" >
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
@@ -20,15 +21,35 @@
         <p>
             <button onclick="tojson()">To JSON</button>
             <button onclick="traverse()">Traverse</button>
+
         </p>
-        
-        <label>Key<abbr onclick="generateInput()" title="Comma-seperated, click to generate">s</abbr>
-            for insertion/deletion: <input id="treekeyvalue" value="11" onkeyup="deleteOrInsert(event)">
-        </label>
+        <p>
+            <a id="autorerefactoring" href="https://github.com/vincenzopalazzo"> Author revisit GUI </a>
+        </p>
+        <p>
+            <label>Key<abbr onclick="generateInput()" title="Comma-seperated, click to generate">s</abbr>
+                 for insertion/deletion: <input id="treekeyvalue" value="11" onkeyup="deleteOrInsert(event)"/>
+            </label>
+        </p>
+
+        <p id="htmvalidation">
+            <a href="https://validator.w3.org/check?uri=referer">
+                <img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0 Strict" height="31" width="88" />
+            </a>
+        </p>
+        <p id="cssvalidation">
+            <a href="http://jigsaw.w3.org/css-validator">
+                <img style="border:0;width:88px;height:31px;" src="http://jigsaw.w3.org/css-validator/images/vcss"
+                alt="Valid CSS!" />
+            </a>
+        </p>
+
         <p>
             <button id="ins_button" onclick="ins(readInput())">Insert</button>
             <button id="del_button" onclick="del(readInput())">Delete</button>
-            <br>
+            <br/>
+        </p>
+        <p id="buttonsecondary">
             <label>Delete:</label>
             <button onclick="del(['F'])">F</button>
             <button onclick="del(['M'])">M</button>
@@ -36,17 +57,16 @@
             <button onclick="del(['D'])">D</button>
             <button onclick="del(['B'])">B</button>
             <button onclick="del(['N'])">N</button>
-            <label>
-                Show intermediate states of the tree: <input type="checkbox" id="drawCheckBox" class="checkboxin" checked></input>
+            <label class="container">
+                Show intermediate states of the tree <input type="checkbox" id="drawCheckBox" checked="checked"/>
+                    <span class="checkmark"></span>
             </label>
             <button onclick="setDelay()">Set delay</button>
-            </p>
+        </p>
         <!--
         <button onclick="draw()">Draw</button>
         -->
-        <p>
-            <div id="svgelem"/></div>
-        </p>
+        <div id="svgelem"></div>
         <div class="textareadiv">
             <p>
                 <button onclick="init('simple','simplem')">Init simple</button>
@@ -54,9 +74,9 @@
                 <input type="hidden" id="empty" value='{"keys":[]}'></input>
             </p>
             <label>
-                M: <input id="simplem" value="2">
+                M: <input id="simplem" value="2"/>
             </label>
-            <br>
+            <br/>
             <textarea id="simple" cols="60" rows="5">
                 {"keys": [10,20,30],
                 "children": [{"keys": [1,2]}, {"keys": [11,12]}, {"keys": [21,22]}, {"keys": [31,32]}]
@@ -65,10 +85,10 @@
 
             <p>
                 <button onclick="init('book','bookm')">Init book</button>
-                <br>
+                <br/>
                 <label>
-                    M: <input id="bookm" value="3">
-                </label><br>
+                    M: <input id="bookm" value="3"/>
+                </label><br/>
             </p>
 
             <textarea id="book" cols="60" rows="10">
@@ -94,11 +114,11 @@
 
             <p>
                 <button onclick="init('insex','insexm')">Init insex</button>
-                <br>
+                <br/>
                 <label>
-                    M: <input id="insexm" value="3">
+                    M: <input id="insexm" value="3"/>
                 </label>
-                <br>
+                <br/>
             </p>
             <textarea id="insex" cols="60" rows="10">
                 {
@@ -114,12 +134,12 @@
             </textarea>    
         </div>
         <p>
-            <textarea readonly id="out" cols="60" rows="10"/></textarea>
+            <textarea id="out" cols="60" rows="10"></textarea>
         </p>
 
-        <script>
-            // document.getElementById("del_button").style.fontWeight = "bold";
+        <!-- <script>
+            document.getElementById("del_button").style.fontWeight = "bold";
             setEnterAction("ins");
-        </script>
+        </script> -->
     </body>
 </html>
