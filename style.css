@@ -1,0 +1,59 @@
+@import url("http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300ita‌​lic,400italic,500,500italic,700,700italic,900italic,900");
+body{
+	background-color: #D3D3D3;
+	font-family: 'Roboto';
+	font-size: 1vw;
+	color: black;
+}
+
+button{
+	background-color: #00BFFF;
+	color: white;
+	font-weight: bold;
+	font-size: 1vw;
+	border-color: #00BFFF;
+	border-radius: 0.3vw 0.3vw 0.3vw 0.3vw;
+}
+
+p#forproblems{
+	font-size: 1vw;
+	font-weight: bold;
+}
+
+a:hover{
+	color: #00BFFF;
+}
+
+textarea{
+	padding-top: 2vw;
+	cursor: text;
+	background-color: #DCDCDC;
+}
+
+input{
+	margin-top: 0.5vw;
+	background-color: #DCDCDC;
+}
+
+textarea, input{
+	border-radius: 0.2vw 0.2vw 0.2vw;
+}
+
+button#ins_button{
+	margin-left: 13em;
+	margin-bottom: 5em;
+}
+button:hover{
+	color: 	#DCDCDC;
+	cursor: pointer;
+}
+
+div.textareadiv{
+	float: right;
+}
+
+label{
+	color: black;
+	font-weight: bold;
+}
+

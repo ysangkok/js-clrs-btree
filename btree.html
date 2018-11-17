@@ -1,91 +1,125 @@
-<!doctype html>
-<head>
-<meta charset='utf-8'>
-<title>B-Tree</title>
-<style>
-* {
-font-size: small;
-}
-textarea {
-font-size: 14px;
-font-family: 'Terminus', monospace;
-}
-abbr:hover {
-cursor: help;
-}
-abbr {
-text-decoration: underline;
-}
-</style>
-</head>
-<body onload="onLoad()">
-<script src="viz.js"></script>
-<script src="btree.js"></script>
-<script src="gui.js"></script>
-<h1>B-Tree (<a href="https://github.com/ysangkok/js-clrs-btree/issues/new">file issue/submit feedback</a>)</h1>
-<button onclick="tojson()">To JSON</button>
-<button onclick="traverse()">Traverse</button>
-<label>Key<abbr onclick="generateInput()" title="Comma-seperated, click to generate">s</abbr> for insertion/deletion: <input id="treekeyvalue" value="11" onkeyup="deleteOrInsert(event)"></label>
-<button id="ins_button" onclick="ins(readInput())">Insert</button>
-<button id="del_button" onclick="del(readInput())">Delete</button>
-Delete:
-<button onclick="del(['F'])">F</button>
-<button onclick="del(['M'])">M</button>
-<button onclick="del(['G'])">G</button>
-<button onclick="del(['D'])">D</button>
-<button onclick="del(['B'])">B</button>
-<button onclick="del(['N'])">N</button>
-Show intermediate states of the tree: <input type="checkbox" id="drawCheckBox" checked></input>
-<button onclick="setDelay()">Set delay</button>
-<!--
-<button onclick="draw()">Draw</button>
--->
-<div style="float:right">
-<p><button onclick="init('simple','simplem')">Init simple</button><button onclick="init('empty','simplem')">Init empty with this M</button><input type="hidden" id="empty" value='{"keys":[]}'></input>
-<br><label>M: <input id="simplem" value="2"></label><br>
-<textarea id="simple" cols="60" rows="5">
-{"keys": [10,20,30],
- "children": [{"keys": [1,2]}, {"keys": [11,12]}, {"keys": [21,22]}, {"keys": [31,32]}]
-}
-</textarea>
-<p><button onclick="init('book','bookm')">Init book</button><br><label>M: <input id="bookm" value="3"></label><br>
-<textarea id="book" cols="60" rows="10">
-{
-"keys":["P"],
-"children":[
-    {"keys":["C","G","M"],
-     "children": [
-        {"keys": ["A","B"]},
-        {"keys": ["D","E","F"]},
-        {"keys": ["J","K","L"]},
-        {"keys": ["N","O"]}
-    ]},
-    {"keys":["T","X"],
-     "children": [
-        {"keys": ["Q","R","S"]},
-        {"keys": ["U","V"]},
-        {"keys": ["Y","Z"]}
-    ]}
-]
-}
-</textarea>
-<p><button onclick="init('insex','insexm')">Init insex</button><br><label>M: <input id="insexm" value="3"></label><br>
-<textarea id="insex" cols="60" rows="10">
-{
-"keys":["G","M","P","X"],
-"children":[
-    {"keys":["A","C","D","E"]},
-    {"keys":["J","K"]},
-    {"keys":["N","O"]},
-    {"keys":["R","S","T","U","V"]},
-    {"keys":["Y","Z"]}
-]
-}
-</textarea>
-</div>
-<p><div id="svgelem"></div>
-<p><textarea readonly id="out" cols="60" rows="10"></textarea>
-<script>
-document.getElementById("del_button").style.fontWeight = "bold";
-setEnterAction("ins");
-</script>
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN""XHTML1-s.dtd" >
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+    <head>
+        <title>B-Tree</title>
+        <link rel="stylesheet" type="text/css" href="style.css"/>        
+    </head>
+
+    <body onload="onLoad()">
+        <script src="viz.js" type="text/javascript"></script>
+        <script src="btree.js" type="text/javascript"></script>
+        <script src="gui.js" type="text/javascript"></script>
+
+        <h1>B-Tree</h1>
+        <p id="forproblems">For problems and any feedback: 
+            <a id="problemlink" href="https://github.com/ysangkok/js-clrs-btree/issues/new"> Touch here</a>
+        </p>
+        <p>
+            <button onclick="tojson()">To JSON</button>
+            <button onclick="traverse()">Traverse</button>
+        </p>
+        
+        <label>Key<abbr onclick="generateInput()" title="Comma-seperated, click to generate">s</abbr>
+            for insertion/deletion: <input id="treekeyvalue" value="11" onkeyup="deleteOrInsert(event)">
+        </label>
+        <p>
+            <button id="ins_button" onclick="ins(readInput())">Insert</button>
+            <button id="del_button" onclick="del(readInput())">Delete</button>
+            <br>
+            <label>Delete:</label>
+            <button onclick="del(['F'])">F</button>
+            <button onclick="del(['M'])">M</button>
+            <button onclick="del(['G'])">G</button>
+            <button onclick="del(['D'])">D</button>
+            <button onclick="del(['B'])">B</button>
+            <button onclick="del(['N'])">N</button>
+            <label>
+                Show intermediate states of the tree: <input type="checkbox" id="drawCheckBox" class="checkboxin" checked></input>
+            </label>
+            <button onclick="setDelay()">Set delay</button>
+            </p>
+        <!--
+        <button onclick="draw()">Draw</button>
+        -->
+        <p>
+            <div id="svgelem"/></div>
+        </p>
+        <div class="textareadiv">
+            <p>
+                <button onclick="init('simple','simplem')">Init simple</button>
+                <button onclick="init('empty','simplem')">Init empty with this M</button>
+                <input type="hidden" id="empty" value='{"keys":[]}'></input>
+            </p>
+            <label>
+                M: <input id="simplem" value="2">
+            </label>
+            <br>
+            <textarea id="simple" cols="60" rows="5">
+                {"keys": [10,20,30],
+                "children": [{"keys": [1,2]}, {"keys": [11,12]}, {"keys": [21,22]}, {"keys": [31,32]}]
+                }
+            </textarea>
+
+            <p>
+                <button onclick="init('book','bookm')">Init book</button>
+                <br>
+                <label>
+                    M: <input id="bookm" value="3">
+                </label><br>
+            </p>
+
+            <textarea id="book" cols="60" rows="10">
+                {
+                "keys":["P"],
+                "children":[
+                    {"keys":["C","G","M"],
+                    "children": [
+                        {"keys": ["A","B"]},
+                        {"keys": ["D","E","F"]},
+                        {"keys": ["J","K","L"]},
+                        {"keys": ["N","O"]}
+                        ]},
+                        {"keys":["T","X"],
+                        "children": [
+                        {"keys": ["Q","R","S"]},
+                        {"keys": ["U","V"]},
+                        {"keys": ["Y","Z"]}
+                        ]}
+                    ]
+                }
+            </textarea>
+
+            <p>
+                <button onclick="init('insex','insexm')">Init insex</button>
+                <br>
+                <label>
+                    M: <input id="insexm" value="3">
+                </label>
+                <br>
+            </p>
+            <textarea id="insex" cols="60" rows="10">
+                {
+                "keys":["G","M","P","X"],
+                "children":[
+                    {"keys":["A","C","D","E"]},
+                    {"keys":["J","K"]},
+                    {"keys":["N","O"]},
+                    {"keys":["R","S","T","U","V"]},
+                    {"keys":["Y","Z"]}
+                ]
+                }
+            </textarea>    
+        </div>
+        <p>
+            <textarea readonly id="out" cols="60" rows="10"/></textarea>
+        </p>
+
+        <script>
+            // document.getElementById("del_button").style.fontWeight = "bold";
+            setEnterAction("ins");
+        </script>
+    </body>
+</html>
