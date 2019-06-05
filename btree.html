@@ -89,3 +89,10 @@ Show intermediate states of the tree: <input type="checkbox" id="drawCheckBox" c
 document.getElementById("del_button").style.fontWeight = "bold";
 setEnterAction("ins");
 </script>
+<div>
+You can link a demonstration of the construction of a particular B-Tree by putting commands in the URL, like so:
+<br>
+<tt><a href=http://ysangkok.github.io/js-clrs-btree/btree.html#{%22actions%22:[[%22initTree%22,{%22keys%22:[]}],[%22insert%22,1],[%22insert%22,2],[%22insert%22,3]]}>http://ysangkok.github.io/js-clrs-btree/btree.html#{%22actions%22:[[%22initTree%22,{%22keys%22:[]}],[%22insert%22,1],[%22insert%22,2],[%22insert%22,3]]}</a></tt>
+<br>
+The delay between frames can be set using the button "Set delay" or the property "delay" can be set on the object, on the level that "actions" is on. To find a value for the B-Tree (an empty tree in the above example, having a root element with an empty list of keys), you can use the "To JSON" button.
+</div>
