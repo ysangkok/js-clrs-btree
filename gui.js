@@ -97,9 +97,13 @@ function scheduleNext(idx) {
     window.setTimeout(function() {
         console.log(v);
         var fun;
-        if (v[0] === "initTree")
-            fun = window["initTree"];
-        else if (v[0] === "stop") {
+        if (v[0].startsWith("initTree")) {
+            let strM = v[0].substring("initTree".length);
+            let chosenM = parseInt(strM, 10);
+            if (chosenM == 0) chosenM = 3;
+            console.log("Chosen M from URL (defaults to 3 in case of bad parse):", chosenM);
+            fun = (slice) => window["initTree"](slice, chosenM);
+        } else if (v[0] === "stop") {
             draw();
             return;
         } else
